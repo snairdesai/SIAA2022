@@ -1,0 +1,97 @@
+---
+title: "revised intergenerational figures"
+output: html_document
+---
+
+#### @ Sri Just paste this into the relevant section of your own code.
+
+#######Plotting Figure 13#######################
+library(scales)
+pol_ediff <- read.csv("combined_SIAA.csv")
+
+# We coded this based on POTENTIAL selections (excluding NA values)
+# Immigration Opinion --> 4 categories
+# Affirmative Action --> 4 categories
+# Religious Tolerance --> 4 categories
+# Police Brutality --> 4 categories
+# Media Suppression --> 4 categories
+# Immigrant Deportation --> 4 categories
+# Travel Ban --> 4 categories
+
+pol_ediff  <- pol_ediff  %>%
+  select(immigration_opinion_encoded_diff,
+         affirmative_action_encoded_diff,
+         religious_tolerance_encoded_diff,
+         police_brutality_encoded_diff,
+         media_suppression_encoded_diff,
+         immigrant_deportation_encoded_diff,
+         travel_ban_encoded_diff)
+
+# Here, we want to generate the percentage absolute difference. So, we take the mean absolute difference by row and divide by the total number of categories multiplied by 100.
+pol_ediff2 <- (colMeans(x=pol_ediff, na.rm = TRUE)/4)
+pol_ediff2 <- data.frame(pol_ediff2)
+pol_ediff2 <- round(pol_ediff2$pol_ediff2, 1)
+pol_ediff2 <- data.frame(pol_ediff2)
+
+
+pol_ediff2$Question  <- c('Undocumented Citizenship', 'Affirmative Action', 'Religious Tolerance', 'Police Brutality', 'Media Suppression', 'Immigrant Deportation', 'Travel Ban')
+
+pol_ediff2 <- pol_ediff2 %>% rename(Average_Difference = pol_ediff2)
+
+fig13 <- ggplot(data=pol_ediff2, aes(x=Question, y=Average_Difference, fill=Question, label = scales::percent(Average_Difference))) + geom_bar(stat = 'identity', width = .45) + labs(title = "Average % Difference in U.S. Policy Questions by Generation" ,
+       x = "Policy Questions",
+       y = "Percent Differences", 
+       colour = "") + 
+  scale_fill_manual(values = c("Undocumented Citizenship" = "midnightblue", 
+                               "Affirmative Action" = "brown3", 
+                               "Religious Tolerance" = "goldenrod1", "Police Brutality" = "cadetblue3", "Media Suppression" = "gray76", 
+                               "Immigrant Deportation" = "darkgreen", "Travel Ban" =  "lightsteelblue3")) + scale_y_continuous(labels = scales::percent) +
+                  theme_light() 
+fig13A <- fig13 + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+fig13A
+ #black and white theme in the background
+###################################
+
+Ind_ediff <- read.csv("combined_SIAA.csv")
+
+# Media Suppression India --> 4 categories
+# Immigration Deportation India --> 4 categories
+# Citizenship India --> 4 categories
+# Affirmative Action India --> 4 categories
+# Police Brutality India --> 4 categories
+# Hindutwa Threat India --> 4 categories
+ 
+Ind_ediff  <- Ind_ediff   %>%
+  select(media_suppression_encoded_diff, 
+         immigration_deportation_india_encoded_diff, 
+         citizenship_india_encoded_diff, 
+         affirmative_action_india_encoded_diff, 
+         police_brutality_india_encoded_diff, 
+         hindutwa_threat_encoded_diff)
+
+
+Ind_ediff2 <- (colMeans(x=Ind_ediff, na.rm = TRUE)/4)
+Ind_ediff2 <- data.frame(Ind_ediff2)
+Ind_ediff2 <- round(Ind_ediff2$Ind_ediff2, 1)
+Ind_ediff2 <- data.frame(Ind_ediff2)
+
+
+Ind_ediff2$Question  <- c('Media Suppression', 'Immigrant Deportation', 'Muslim Citizenship', 'Affirmative Action', 'Police Brutality', 'Hindutwa Threat')
+
+
+Ind_ediff2 <- Ind_ediff2 %>% rename(Average_Difference = Ind_ediff2)
+
+
+fig14 <-
+  ggplot(data=Ind_ediff2 , aes(x=Question, y=Average_Difference, fill=Question, label = scales::percent(Average_Difference))) +
+  geom_bar(stat = 'identity', width = .45)  + 
+  labs(title = "Average % Difference in India Policy Questions by Generation" ,
+       x = "Policy Questions",
+       y = "Percent Differences", 
+       colour = "") + 
+  scale_fill_manual(values = c("Media Suppression" = "midnightblue", 
+                               "Immigrant Deportation" = "brown3", 
+                               "Muslim Citizenship" = "goldenrod1", "Affirmative Action" = "cadetblue3", "Media Suppression" = "gray76", 
+                               "Police Brutality" = "darkgreen", "Hindutwa Threat" =  "lightsteelblue3")) + scale_y_continuous(labels = scales::percent) + theme_light() 
+fig14A <- fig14 + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+fig14A
